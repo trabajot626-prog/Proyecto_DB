@@ -1,6 +1,82 @@
 # Proyecto DB
 
-Sistema Laravel basado en el diagrama ER de la imagen: `Empleado`, `Cargo` y `FuncionesCargo`, con relaciones y CRUD protegido por Laravel Sanctum.
+Sistema Laravel basado en el diagrama ER de `Empleado`, `Cargo` y `FuncionesCargo`, con relaciones y CRUD protegido por Laravel Sanctum.
+
+## Requisitos
+
+- PHP 8.3 o superior.
+- Composer.
+- Node.js y npm.
+- Una base de datos compatible con Laravel, por ejemplo MySQL.
+
+## Paso a paso para ponerlo en marcha
+
+### 1. Instala las dependencias de PHP
+
+```bash
+composer install
+```
+
+### 2. Instala las dependencias de Node.js
+
+```bash
+npm install
+```
+
+### 3. Crea el archivo de entorno
+
+Si el proyecto no tiene un archivo `.env`, crea una copia desde el ejemplo:
+
+```bash
+copy .env.example .env
+```
+
+### 4. Configura la base de datos
+
+Abre el archivo `.env` y ajusta los datos de conexión a tu entorno:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nombre_de_tu_base_de_datos
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_password
+```
+
+### 5. Genera la clave de la aplicación
+
+```bash
+php artisan key:generate
+```
+
+### 6. Ejecuta las migraciones
+
+```bash
+php artisan migrate
+```
+
+### 7. Compila los assets frontend
+
+```bash
+npm run build
+```
+
+### 8. Levanta el proyecto
+
+En una terminal ejecuta el servidor de Laravel:
+
+```bash
+php artisan serve
+```
+
+En otra terminal ejecuta Vite para el frontend:
+
+```bash
+npm run dev
+```
+
+Luego abre la dirección que te indique Laravel, normalmente `http://127.0.0.1:8000`.
 
 ## Alcance
 
