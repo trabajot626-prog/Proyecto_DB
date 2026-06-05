@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StoreCargoRequest;
+use App\Http\Requests\Api\UpdateCargoRequest;
 use App\Models\Cargo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,14 +21,9 @@ class CargoController extends Controller
         return response()->json($query->paginate($request->integer('per_page', 15)));
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreCargoRequest $request): JsonResponse
     {
-        $data = $request->validate([
-            'nombre_cargo' => ['required', 'string', 'max:255'],
-            'descripcion' => ['nullable', 'string'],
-        ]);
-
-        $cargo = Cargo::create($data);
+        $cargo = Cargo::create($request->validated());
 
         return response()->json($cargo->load(['empleado', 'funcionesCargo']), 201);
     }
@@ -36,14 +33,9 @@ class CargoController extends Controller
         return response()->json($cargo->load(['empleado', 'funcionesCargo']));
     }
 
-    public function update(Request $request, Cargo $cargo): JsonResponse
+    public function update(UpdateCargoRequest $request, Cargo $cargo): JsonResponse
     {
-        $data = $request->validate([
-            'nombre_cargo' => ['sometimes', 'required', 'string', 'max:255'],
-            'descripcion' => ['sometimes', 'nullable', 'string'],
-        ]);
-
-        $cargo->update($data);
+        $cargo->update($request->validated());
 
         return response()->json($cargo->fresh()->load(['empleado', 'funcionesCargo']));
     }

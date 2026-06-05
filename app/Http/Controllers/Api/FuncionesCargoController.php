@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StoreFuncionesCargoRequest;
+use App\Http\Requests\Api\UpdateFuncionesCargoRequest;
 use App\Models\FuncionesCargo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,15 +29,9 @@ class FuncionesCargoController extends Controller
         return response()->json($query->paginate($request->integer('per_page', 15)));
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreFuncionesCargoRequest $request): JsonResponse
     {
-        $data = $request->validate([
-            'cargo_id' => ['required', 'integer', 'exists:cargos,id'],
-            'descripcion_funcion' => ['required', 'string'],
-            'estado' => ['required', 'boolean'],
-        ]);
-
-        $funcion = FuncionesCargo::create($data);
+        $funcion = FuncionesCargo::create($request->validated());
 
         return response()->json($funcion->load('cargo'), 201);
     }
@@ -45,15 +41,9 @@ class FuncionesCargoController extends Controller
         return response()->json($funcionesCargo->load('cargo'));
     }
 
-    public function update(Request $request, FuncionesCargo $funcionesCargo): JsonResponse
+    public function update(UpdateFuncionesCargoRequest $request, FuncionesCargo $funcionesCargo): JsonResponse
     {
-        $data = $request->validate([
-            'cargo_id' => ['sometimes', 'required', 'integer', 'exists:cargos,id'],
-            'descripcion_funcion' => ['sometimes', 'required', 'string'],
-            'estado' => ['sometimes', 'required', 'boolean'],
-        ]);
-
-        $funcionesCargo->update($data);
+        $funcionesCargo->update($request->validated());
 
         return response()->json($funcionesCargo->fresh()->load('cargo'));
     }

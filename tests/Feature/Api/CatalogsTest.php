@@ -10,7 +10,7 @@ beforeEach(function (): void {
     $this->actingAs($this->user, 'sanctum');
 });
 
-test('cargo CRUD works and supports search filters', function (): void {
+test('el CRUD de cargos funciona y soporta filtros de búsqueda', function (): void {
     Cargo::factory()->create([
         'nombre_cargo' => 'Jefe de sistema',
         'descripcion' => 'Coordina el area de tecnologia.',
@@ -36,7 +36,7 @@ test('cargo CRUD works and supports search filters', function (): void {
     $this->deleteJson('/api/cargos/'.$cargoId)->assertNoContent();
 });
 
-test('empleado CRUD works with relations and date filters', function (): void {
+test('el CRUD de empleados funciona con relaciones y filtros de fecha', function (): void {
     $cargo = Cargo::factory()->create();
 
     $create = $this->postJson('/api/empleados', [
@@ -62,7 +62,7 @@ test('empleado CRUD works with relations and date filters', function (): void {
     $this->deleteJson('/api/empleados/'.$empleadoId)->assertNoContent();
 });
 
-test('funciones cargo CRUD works and supports cargo filter', function (): void {
+test('el CRUD de funciones de cargo funciona y soporta filtro por cargo', function (): void {
     $cargo = Cargo::factory()->create();
 
     $create = $this->postJson('/api/funciones-cargo', [

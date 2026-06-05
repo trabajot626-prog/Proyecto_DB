@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-test('login issues a sanctum token', function (): void {
+test('el login emite un token de sanctum', function (): void {
     $user = User::factory()->create([
         'password' => 'password',
     ]);

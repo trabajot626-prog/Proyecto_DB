@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StoreEmpleadoRequest;
+use App\Http\Requests\Api\UpdateEmpleadoRequest;
 use App\Models\Empleado;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class EmpleadoController extends Controller
 {
@@ -35,17 +36,9 @@ class EmpleadoController extends Controller
         return response()->json($query->paginate($request->integer('per_page', 15)));
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreEmpleadoRequest $request): JsonResponse
     {
-        $data = $request->validate([
-            'nombre' => ['required', 'string', 'max:255'],
-            'fecha_nacimiento' => ['required', 'date'],
-            'fecha_ingreso' => ['required', 'date'],
-            'estado' => ['required', 'boolean'],
-            'cargo_id' => ['required', 'integer', 'exists:cargos,id', Rule::unique('empleados', 'cargo_id')],
-        ]);
-
-        $empleado = Empleado::create($data);
+        $empleado = Empleado::create($request->validated());
 
         return response()->json($empleado->load('cargo'), 201);
     }
@@ -55,23 +48,9 @@ class EmpleadoController extends Controller
         return response()->json($empleado->load('cargo'));
     }
 
-    public function update(Request $request, Empleado $empleado): JsonResponse
+    public function update(UpdateEmpleadoRequest $request, Empleado $empleado): JsonResponse
     {
-        $data = $request->validate([
-            'nombre' => ['sometimes', 'required', 'string', 'max:255'],
-            'fecha_nacimiento' => ['sometimes', 'required', 'date'],
-            'fecha_ingreso' => ['sometimes', 'required', 'date'],
-            'estado' => ['sometimes', 'required', 'boolean'],
-            'cargo_id' => [
-                'sometimes',
-                'required',
-                'integer',
-                'exists:cargos,id',
-                Rule::unique('empleados', 'cargo_id')->ignore($empleado->id),
-            ],
-        ]);
-
-        $empleado->update($data);
+        $empleado->update($request->validated());
 
         return response()->json($empleado->fresh()->load('cargo'));
     }
